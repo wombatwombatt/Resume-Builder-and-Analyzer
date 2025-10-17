@@ -115,7 +115,7 @@ class Resume {
     public void printResume() {
         StringBuilder sb = new StringBuilder();
         sb.append("+--------------------------------------------------+\n");
-        sb.append("|                 RESUME                           |\n");
+        sb.append("|                       RESUME                     |\n");
         sb.append("+--------------------------------------------------+\n\n");
 
         if (personalInfo != null) {
