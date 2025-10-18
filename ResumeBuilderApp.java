@@ -333,7 +333,7 @@ class ResumeAnalyzer {
 public class ResumeBuilderApp extends JFrame {
     private Resume resume;
     private JTextField nameField, contactField, emailField;
-    private JTextField degreeField, institutionField, yearField;
+    private JTextField degreeField, institutionField, yearField, honorsField;
     private JTextField roleField, companyField, durationField, descriptionField;
     private JTextField skillField;
     private JTextArea resumePreview;
@@ -463,7 +463,13 @@ public class ResumeBuilderApp extends JFrame {
         yearField = new JTextField(15);
         inputPanel.add(yearField, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
+        gbc.gridx = 0; gbc.gridy = 3;
+        inputPanel.add(new JLabel("Honors (Optional):"), gbc);
+        gbc.gridx = 1;
+        honorsField = new JTextField(15);
+        inputPanel.add(honorsField, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 2;
         JButton addEducationButton = new JButton("Add Education");
         addEducationButton.addActionListener(e -> addEducation());
         inputPanel.add(addEducationButton, gbc);
@@ -564,14 +570,23 @@ public class ResumeBuilderApp extends JFrame {
             String degree = degreeField.getText().trim();
             String institution = institutionField.getText().trim();
             String yearText = yearField.getText().trim();
+            String honors = honorsField.getText().trim();
 
             if (degree.isEmpty() || institution.isEmpty() || yearText.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Please fill all education fields.");
+                JOptionPane.showMessageDialog(this, "Please fill all required education fields (Degree, Institution, Year).");
                 return;
             }
 
             int year = Integer.parseInt(yearText);
-            Education education = new Education(degree, institution, year);
+            
+            // Use AcademicEducation if honors is provided, otherwise use regular AcademicEducation without honors
+            Education education;
+            if (!honors.isEmpty()) {
+                education = new AcademicEducation(degree, institution, year, honors);
+            } else {
+                education = new AcademicEducation(degree, institution, year);
+            }
+            
             resume.addSection(education);
             educationListModel.addElement("- " + education.toString());
 
@@ -579,6 +594,7 @@ public class ResumeBuilderApp extends JFrame {
             degreeField.setText("");
             institutionField.setText("");
             yearField.setText("");
+            honorsField.setText("");
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Please enter a valid year.");
         }
@@ -727,6 +743,7 @@ public class ResumeBuilderApp extends JFrame {
             degreeField.setText("");
             institutionField.setText("");
             yearField.setText("");
+            honorsField.setText("");
             
             // Clear experience fields
             roleField.setText("");
