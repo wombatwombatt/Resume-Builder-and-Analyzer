@@ -235,10 +235,26 @@ public class ResumeBuilderApp {
             System.out.print("Enter your contact number: ");
             String contact = sc.nextLine();
 
+            /*
+            MODIFIED FOR INPUT VALIDATION LOOP, PROGRAM USED TO STOP AFTER CONDITION IS NOT MET
+            
             System.out.print("Enter your email: ");
             String email = sc.nextLine();
             if (!email.contains("@")) {
                 throw new IllegalArgumentException("Invalid email format.");
+            }
+            */
+
+            // INPUT VALIDATION LOOP FOR EMAIL (FINALS MODIFICATION)
+            String email;
+            while (true) {
+                System.out.print("Enter your email: ");
+                email = sc.nextLine();
+                if (email.contains("@")) {
+                    break;
+                } else {
+                    System.out.println("Invalid email format. Please include '@' in your email.");
+                }
             }
 
             resume.setPersonalInfo(new PersonalInfo(name, contact, email));
