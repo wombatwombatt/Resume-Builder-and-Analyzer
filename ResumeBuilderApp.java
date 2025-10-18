@@ -1,4 +1,16 @@
-// FINALS MODIFICATION - Added Swing GUI components and JSON file save/load functionality
+/* RESUME BUILDER AND ANALYZER */
+
+// NW-201 | OBJECT-ORIENTED PROGRAMMING
+
+/*
+GROUP 5 MEMBERS:
+Bermas, Estella Mae E. (Leader)
+Delos Santos Jr., Jimmy L.
+Flores, Dwayne Justin D.
+Tongol, Kathleen Faye Z.
+*/
+
+// FINALS MODIFICATION - Added Swing GUI components and TXT file save/load functionality
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -134,86 +146,38 @@ class Resume {
         return personalInfo;
     }
 
-    // FINALS MODIFICATION - Added method to get formatted resume as string for GUI display
-    public String getFormattedResume() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("+--------------------------------------------------+\n");
-        sb.append("|                       RESUME                     |\n");
-        sb.append("+--------------------------------------------------+\n\n");
 
-        if (personalInfo != null) {
-            sb.append("Name: ").append(personalInfo.getName()).append("\n");
-            sb.append("Contact: ").append(personalInfo.getContact()).append("\n");
-            sb.append("Email: ").append(personalInfo.getEmail()).append("\n\n");
-        }
+        // FINALS MODIFICATION - Added method to get formatted resume as string for GUI display
+        public String getFormattedResume() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("+--------------------------------------------------+\n");
+            sb.append("|                       RESUME                     |\n");
+            sb.append("+--------------------------------------------------+\n\n");
 
-        // group sections by type
-        Map<String, List<ResumeSection>> grouped = new LinkedHashMap<>();
-        for (ResumeSection s : sections) {
-            grouped.computeIfAbsent(s.getTitle(), k -> new ArrayList<>()).add(s);
-        }
-
-        for (String sectionTitle : grouped.keySet()) {
-            sb.append(sectionTitle.toUpperCase()).append("\n");
-            sb.append("----------------------------------------------------\n");
-            for (ResumeSection s : grouped.get(sectionTitle)) {
-                sb.append(s.toString()).append("\n");
-            }
-            sb.append("\n");
-        }
-
-        sb.append("+--------------------------------------------------+\n");
-        return sb.toString();
-    }
-
-    // FINALS MODIFICATION - Added JSON save functionality
-    public void saveToJSON(String filename) throws IOException {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
-            writer.println("{");
-            
             if (personalInfo != null) {
-                writer.println("  \"personalInfo\": {");
-                writer.println("    \"name\": \"" + escapeJSON(personalInfo.getName()) + "\",");
-                writer.println("    \"contact\": \"" + escapeJSON(personalInfo.getContact()) + "\",");
-                writer.println("    \"email\": \"" + escapeJSON(personalInfo.getEmail()) + "\"");
-                writer.println("  },");
+                sb.append("Name: ").append(personalInfo.getName()).append("\n");
+                sb.append("Contact: ").append(personalInfo.getContact()).append("\n");
+                sb.append("Email: ").append(personalInfo.getEmail()).append("\n\n");
             }
-            
-            writer.println("  \"sections\": [");
-            for (int i = 0; i < sections.size(); i++) {
-                ResumeSection section = sections.get(i);
-                writer.println("    {");
-                writer.println("      \"type\": \"" + section.getClass().getSimpleName() + "\",");
-                
-                if (section instanceof Education) {
-                    Education edu = (Education) section;
-                    writer.println("      \"degree\": \"" + escapeJSON(edu.toString().split(" \\| ")[0]) + "\",");
-                    writer.println("      \"institution\": \"" + escapeJSON(edu.toString().split(" \\| ")[1]) + "\",");
-                    writer.println("      \"year\": \"" + edu.toString().split(" \\| ")[2] + "\"");
-                } else if (section instanceof Experience) {
-                    Experience exp = (Experience) section;
-                    String[] parts = exp.toString().split(" \\| ");
-                    writer.println("      \"role\": \"" + escapeJSON(parts[0]) + "\",");
-                    writer.println("      \"company\": \"" + escapeJSON(parts[1]) + "\",");
-                    writer.println("      \"duration\": \"" + escapeJSON(parts[2].split("\\n")[0]) + "\",");
-                    writer.println("      \"description\": \"" + escapeJSON(exp.getDescription()) + "\"");
-                } else if (section instanceof Skill) {
-                    writer.println("      \"name\": \"" + escapeJSON(section.toString().substring(2)) + "\"");
-                }
-                
-                writer.print("    }");
-                if (i < sections.size() - 1) writer.println(",");
-                else writer.println();
-            }
-            writer.println("  ]");
-            writer.println("}");
-        }
-    }
 
-    // FINALS MODIFICATION - Helper method to escape JSON strings
-    private String escapeJSON(String str) {
-        return str.replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r");
-    }
+            // group sections by type
+            Map<String, List<ResumeSection>> grouped = new LinkedHashMap<>();
+            for (ResumeSection s : sections) {
+                grouped.computeIfAbsent(s.getTitle(), k -> new ArrayList<>()).add(s);
+            }
+
+            for (String sectionTitle : grouped.keySet()) {
+                sb.append(sectionTitle.toUpperCase()).append("\n");
+                sb.append("----------------------------------------------------\n");
+                for (ResumeSection s : grouped.get(sectionTitle)) {
+                    sb.append(s.toString()).append("\n");
+                }
+                sb.append("\n");
+            }
+
+            sb.append("+--------------------------------------------------+\n");
+            return sb.toString();
+        }
 
     // method to print resume in a box
     public void printResume() {
