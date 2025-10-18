@@ -4,6 +4,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+// FINALS MODIFICATION - Added Swing GUI components and JSON file save/load functionality
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.*;
+import java.util.regex.Pattern;
+
 // abstract class for resume sections
 abstract class ResumeSection {
     String title;
